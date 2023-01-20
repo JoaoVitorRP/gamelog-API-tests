@@ -18,9 +18,9 @@ function getGenres(): Promise<QueryResult<GenreEntity>> {
   return connection.query(
     `
     SELECT
-        *
+        id, genre
     FROM
-        genres;    
+        genres;
     `
   );
 }
