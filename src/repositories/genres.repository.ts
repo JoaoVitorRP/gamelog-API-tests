@@ -6,9 +6,9 @@ function insertGenre(genre: string): Promise<QueryResult> {
   return connection.query(
     `
     INSERT INTO
-        genres(genre)
+      genres(genre)
     VALUES
-        ($1);
+      ($1);
     `,
     [genre]
   );
@@ -18,14 +18,29 @@ function getGenres(): Promise<QueryResult<GenreEntity>> {
   return connection.query(
     `
     SELECT
-        id, genre
+      id, genre
     FROM
-        genres;
+      genres;
     `
+  );
+}
+
+function getGenreByName(genre: string): Promise<QueryResult<GenreEntity>> {
+  return connection.query(
+    `
+    SELECT
+      id, genre
+    FROM
+      genres
+    WHERE
+      genre = $1;
+    `,
+    [genre]
   );
 }
 
 export const genresRepository = {
   insertGenre,
   getGenres,
+  getGenreByName,
 };

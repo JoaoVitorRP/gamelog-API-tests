@@ -11,9 +11,9 @@ async function validateUniqueName(name: string) {
 }
 
 async function createReviewer(name: string) {
-    await validateUniqueName(name);
+  await validateUniqueName(name);
 
-    return reviewersRepository.insertReviewer(name);
+  return reviewersRepository.insertReviewer(name);
 }
 
 export const reviewersService = {

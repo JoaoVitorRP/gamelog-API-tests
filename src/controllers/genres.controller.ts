@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
 import { Genre } from "../protocols";
 import { genresRepository } from "../repositories/genres.repository.js";
+import { genresService } from "../services/genres.service.js";
 
 export async function insertGenre(req: Request, res: Response) {
   const { genre } = req.body as Genre;
 
   try {
-    await genresRepository.insertGenre(genre);
+    await genresService.createGenre(genre);
     return res.sendStatus(201);
   } catch (err) {
-    if (err.routine === "_bt_check_unique") return res.status(400).send("This genre already exists!");
+    if (err.name === "DuplicatedGenreName") return res.status(400).send(err.message);
     return res.status(500).send(err.message);
   }
 }
