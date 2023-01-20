@@ -6,9 +6,9 @@ function insertReviewer(name: string): Promise<QueryResult<ReviewerId>> {
   return connection.query(
     `
     INSERT INTO
-        reviewers(name)
+      reviewers(name)
     VALUES
-        ($1)
+      ($1)
     RETURNING
       id;
     `,
@@ -20,14 +20,29 @@ function getReviewers(): Promise<QueryResult<ReviewerEntity>> {
   return connection.query(
     `
     SELECT
-        id, name
+      id, name
     FROM
-        reviewers;
+      reviewers;
     `
+  );
+}
+
+function getReviewerByName(name: string): Promise<QueryResult<ReviewerEntity>> {
+  return connection.query(
+    `
+    SELECT
+      id, name
+    FROM
+      reviewers
+    WHERE
+      name = $1;
+    `,
+    [name]
   );
 }
 
 export const reviewersRepository = {
   insertReviewer,
   getReviewers,
+  getReviewerByName,
 };

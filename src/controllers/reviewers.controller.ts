@@ -1,15 +1,16 @@
 import { Request, Response } from "express";
 import { Reviewer } from "../protocols";
 import { reviewersRepository } from "../repositories/reviewers.repository.js";
+import { reviewersService } from "../services/reviewers.service.js";
 
 export async function insertReviewer(req: Request, res: Response) {
   const { name } = req.body as Reviewer;
 
   try {
-    const insertReturn = await reviewersRepository.insertReviewer(name);
+    const insertReturn = await reviewersService.createReviewer(name);
     return res.status(201).send(`Your user id is: ${insertReturn.rows[0].id}`);
   } catch (err) {
-    if (err.routine === "_bt_check_unique") return res.status(400).send("This user already exists!");
+    if (err.name === "DuplicatedNameError") return res.status(400).send(err.message);
     return res.status(500).send(err.message);
   }
 }
