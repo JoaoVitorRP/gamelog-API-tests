@@ -20,6 +20,6 @@ export async function getGenres(req: Request, res: Response) {
     const genres = await genresRepository.getGenres();
     return res.status(200).send(genres.rows);
   } catch (err) {
-    return res.status(500).send(err);
+    return res.status(500).send(err.message);
   }
 }

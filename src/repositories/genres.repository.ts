@@ -39,8 +39,23 @@ function getGenreByName(genre: string): Promise<QueryResult<GenreEntity>> {
   );
 }
 
+function getGenreById(id: number): Promise<QueryResult<GenreEntity>> {
+  return connection.query(
+    `
+    SELECT
+      id, genre
+    FROM
+      genres
+    WHERE
+      id = $1;
+    `,
+    [id]
+  );
+}
+
 export const genresRepository = {
   insertGenre,
   getGenres,
   getGenreByName,
+  getGenreById,
 };
