@@ -4,10 +4,10 @@ import { gamesRepository } from "../repositories/games.repository.js";
 import { gameService } from "../services/games.service.js";
 
 export async function insertGame(req: Request, res: Response) {
-  const { title, genre_id } = req.body as Game;
+  const { title, playtime, genre_id } = req.body as Game;
 
   try {
-    await gameService.createGame(title, genre_id);
+    await gameService.createGame(title, playtime, genre_id);
     return res.sendStatus(201);
   } catch (err) {
     if (err.name === "DuplicatedGameName") return res.status(400).send(err.message);

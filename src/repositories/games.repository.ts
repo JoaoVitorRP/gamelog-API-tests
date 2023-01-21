@@ -2,15 +2,15 @@ import { QueryResult } from "pg";
 import { connection } from "../database/db.js";
 import { GameEntity, GameEntityWithJoin } from "../protocols";
 
-function insertGame(title: string, genre_id: number): Promise<QueryResult> {
+function insertGame(title: string, playtime: number, genre_id: number): Promise<QueryResult> {
   return connection.query(
     `
     INSERT INTO
-      games(title, genre_id)
+      games(title, playtime, genre_id)
     VALUES
-      ($1, $2);
+      ($1, $2, $3);
     `,
-    [title, genre_id]
+    [title, playtime, genre_id]
   );
 }
 
@@ -18,7 +18,7 @@ function getGames(genre: string): Promise<QueryResult<GameEntityWithJoin>> {
   return connection.query(
     `
     SELECT
-      ga.id, ga.title, ge.genre
+      ga.id, ga.title, ga.playtime, ge.genre
     FROM
       games ga
     JOIN
@@ -35,7 +35,7 @@ function getGameByTitle(title: string): Promise<QueryResult<GameEntity>> {
   return connection.query(
     `
     SELECT
-      id, title, genre_id
+      id, title, playtime, genre_id
     FROM
       games
     WHERE

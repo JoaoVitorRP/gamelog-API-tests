@@ -21,12 +21,12 @@ async function validateGenreId(id: number) {
   }
 }
 
-async function createGame(title: string, genre_id: number) {
+async function createGame(title: string, playtime: number, genre_id: number) {
   await validateUniqueGame(title);
 
   await validateGenreId(genre_id);
 
-  return gamesRepository.insertGame(title, genre_id);
+  return gamesRepository.insertGame(title, playtime, genre_id);
 }
 
 export const gameService = {
