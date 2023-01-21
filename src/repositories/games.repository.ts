@@ -73,10 +73,23 @@ function updatePlaytime(playtime: number, id: number): Promise<QueryResult> {
   );
 }
 
+function deleteGame(id: number): Promise<QueryResult> {
+  return connection.query(
+    `
+    DELETE FROM
+      games
+    WHERE
+      id = $1;
+    `,
+    [id]
+  );
+}
+
 export const gamesRepository = {
   insertGame,
   getGames,
   getGameByTitle,
   getGameById,
   updatePlaytime,
+  deleteGame,
 };

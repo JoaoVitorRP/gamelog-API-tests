@@ -36,7 +36,21 @@ export async function patchGame(req: Request, res: Response) {
     return res.sendStatus(201);
   } catch (err) {
     if (err.name === "GameNotFound") return res.status(404).send(err.message);
-    if (err.message === 'invalid input syntax for type integer: "NaN"')
+    if (err.message === `invalid input syntax for type integer: "${id}"`)
+      return res.status(400).send("Param id must be an integer number");
+    return res.status(500).send(err.message);
+  }
+}
+
+export async function deleteGame(req: Request, res: Response) {
+  const { id } = req.params as GameIdParam;
+
+  try {
+    await gamesService.deleteGame(Number(id));
+    return res.sendStatus(200);
+  } catch (err) {
+    if (err.name === "GameNotFound") return res.status(404).send(err.message);
+    if (err.message === `invalid input syntax for type integer: "${Number(id)}"`)
       return res.status(400).send("Param id must be an integer number");
     return res.status(500).send(err.message);
   }

@@ -45,7 +45,14 @@ async function updatePlaytime(playtime: number, id: number) {
   return gamesRepository.updatePlaytime(playtime, id);
 }
 
+async function deleteGame(id: number) {
+  await validateGameId(id);
+
+  return gamesRepository.deleteGame(id);
+}
+
 export const gamesService = {
   createGame,
   updatePlaytime,
+  deleteGame,
 };
