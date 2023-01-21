@@ -22,3 +22,7 @@ export type GameIdParam = {
 };
 
 export type GamePlaytime = Omit<GameEntity, "id" | "title" | "genre_id" | "genre">;
+
+export type GamePlaytimeAverage = {
+  avg: string;
+};

@@ -55,3 +55,13 @@ export async function deleteGame(req: Request, res: Response) {
     return res.status(500).send(err.message);
   }
 }
+
+export async function getPlaytimeAverage(req: Request, res: Response) {
+  try {
+    const average = await gamesRepository.getPlaytimeAverage();
+    const time = Number(average.rows[0].avg)
+    return res.status(200).send(`Your average playtime is: ${time.toFixed(2)} minutes`);
+  } catch (err) {
+    return res.status(500).send(err.message);
+  }
+}

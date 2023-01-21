@@ -1,6 +1,6 @@
 import { QueryResult } from "pg";
 import { connection } from "../database/db.js";
-import { GameEntity } from "../protocols";
+import { GameEntity, GamePlaytimeAverage } from "../protocols";
 
 function insertGame(title: string, playtime: number, genre_id: number): Promise<QueryResult> {
   return connection.query(
@@ -85,6 +85,17 @@ function deleteGame(id: number): Promise<QueryResult> {
   );
 }
 
+function getPlaytimeAverage(): Promise<QueryResult<GamePlaytimeAverage>> {
+  return connection.query(
+    `
+    SELECT
+      AVG(playtime)
+    FROM
+      games;
+    `
+  );
+}
+
 export const gamesRepository = {
   insertGame,
   getGames,
@@ -92,4 +103,5 @@ export const gamesRepository = {
   getGameById,
   updatePlaytime,
   deleteGame,
+  getPlaytimeAverage,
 };
