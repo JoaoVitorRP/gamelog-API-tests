@@ -21,6 +21,16 @@ async function validateGenreId(id: number) {
   }
 }
 
+async function validateGameId(id: number) {
+  const gameInfo = await gamesRepository.getGameById(id);
+  if (gameInfo.rows.length === 0) {
+    throw {
+      name: "GameNotFound",
+      message: "Could not find a game with this id!",
+    };
+  }
+}
+
 async function createGame(title: string, playtime: number, genre_id: number) {
   await validateUniqueGame(title);
 
@@ -29,6 +39,13 @@ async function createGame(title: string, playtime: number, genre_id: number) {
   return gamesRepository.insertGame(title, playtime, genre_id);
 }
 
-export const gameService = {
+async function updatePlaytime(playtime: number, id: number) {
+  await validateGameId(id);
+
+  return gamesRepository.updatePlaytime(playtime, id);
+}
+
+export const gamesService = {
   createGame,
+  updatePlaytime,
 };

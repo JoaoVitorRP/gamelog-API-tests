@@ -1,6 +1,6 @@
 import { QueryResult } from "pg";
 import { connection } from "../database/db.js";
-import { GameEntity, GameEntityWithJoin } from "../protocols";
+import { GameEntity } from "../protocols";
 
 function insertGame(title: string, playtime: number, genre_id: number): Promise<QueryResult> {
   return connection.query(
@@ -14,7 +14,7 @@ function insertGame(title: string, playtime: number, genre_id: number): Promise<
   );
 }
 
-function getGames(genre: string): Promise<QueryResult<GameEntityWithJoin>> {
+function getGames(genre: string): Promise<QueryResult<GameEntity>> {
   return connection.query(
     `
     SELECT
@@ -45,8 +45,38 @@ function getGameByTitle(title: string): Promise<QueryResult<GameEntity>> {
   );
 }
 
+function getGameById(id: number): Promise<QueryResult<GameEntity>> {
+  return connection.query(
+    `
+    SELECT
+      id, title, playtime, genre_id
+    FROM
+      games
+    WHERE
+      id = $1;
+    `,
+    [id]
+  );
+}
+
+function updatePlaytime(playtime: number, id: number): Promise<QueryResult> {
+  return connection.query(
+    `
+    UPDATE
+      games
+    SET
+      playtime = $1
+    WHERE
+      id = $2;
+    `,
+    [playtime, id]
+  );
+}
+
 export const gamesRepository = {
   insertGame,
   getGames,
   getGameByTitle,
+  getGameById,
+  updatePlaytime,
 };
