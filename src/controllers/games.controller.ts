@@ -58,10 +58,11 @@ export async function deleteGame(req: Request, res: Response) {
 
 export async function getPlaytimeAverage(req: Request, res: Response) {
   try {
-    const average = await gamesRepository.getPlaytimeAverage();
-    const time = Number(average.rows[0].avg)
+    const average = await gamesService.getAveragePlaytime();
+    const time = Number(average.rows[0].avg);
     return res.status(200).send(`Your average playtime is: ${time.toFixed(2)} minutes`);
   } catch (err) {
+    if (err.name === "MissingGames") return res.status(400).send(err.message);
     return res.status(500).send(err.message);
   }
 }

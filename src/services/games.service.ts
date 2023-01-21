@@ -51,8 +51,21 @@ async function deleteGame(id: number) {
   return gamesRepository.deleteGame(id);
 }
 
+async function getAveragePlaytime() {
+  const gameInfo = await gamesRepository.getGames(undefined);
+  if (gameInfo.rows.length <= 1) {
+    throw {
+      name: "MissingGames",
+      message: "Please, add two or more games before trying to calculate average playtime",
+    };
+  }
+
+  return gamesRepository.getPlaytimeAverage();
+}
+
 export const gamesService = {
   createGame,
   updatePlaytime,
   deleteGame,
+  getAveragePlaytime,
 };
