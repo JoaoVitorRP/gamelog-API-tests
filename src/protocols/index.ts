@@ -6,6 +6,7 @@ export type GamePostRequest = {
   title: string;
   playtime: number;
   genre_id: number;
+  platform_id: number;
 };
 
 export type GameReturn = {
@@ -15,13 +16,16 @@ export type GameReturn = {
   genres: {
     genre: string;
   };
+  platforms: {
+    platform: string;
+  };
 };
 
 export type GameIdParam = {
   id: string;
 };
 
-export type GamePlaytime = Omit<GamePostRequest, "title" | "genre_id">;
+export type GamePlaytime = Omit<GamePostRequest, "title" | "genre_id" | "platforn_id">;
 
 export type GamePlaytimeAverage = {
   avg: string;

@@ -4,6 +4,7 @@ export const gameSchema = Joi.object({
   title: Joi.string().required(),
   playtime: Joi.number().integer().required(),
   genre_id: Joi.number().integer().required(),
+  platform_id: Joi.number().integer().required(),
 });
 
 export const playtimeSchema = Joi.object({

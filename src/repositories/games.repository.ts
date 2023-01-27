@@ -1,12 +1,9 @@
 import prisma from "../database/db.js";
+import { GamePostRequest } from "../protocols/index.js";
 
-function createGame(title: string, playtime: number, genre_id: number) {
+function createGame(game: GamePostRequest) {
   return prisma.games.create({
-    data: {
-      title: title,
-      playtime: playtime,
-      genre_id: genre_id,
-    },
+    data: game,
   });
 }
 
@@ -21,6 +18,11 @@ function findGames() {
           genre: true,
         },
       },
+      platforms: {
+        select: {
+          platform: true,
+        }
+      }
     },
   });
 }
@@ -36,6 +38,11 @@ function findGamesByGenre(genre: string) {
           genre: true,
         },
       },
+      platforms: {
+        select: {
+          platform: true,
+        }
+      }
     },
     where: {
       genres: {

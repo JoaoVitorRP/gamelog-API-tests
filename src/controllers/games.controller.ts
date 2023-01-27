@@ -3,14 +3,15 @@ import { GameIdParam, GamePlaytime, GamePostRequest, GameReturn, Genre } from ".
 import { gamesService } from "../services/games.service.js";
 
 export async function insertGame(req: Request, res: Response) {
-  const { title, playtime, genre_id } = req.body as GamePostRequest;
+  const game = req.body as GamePostRequest;
 
   try {
-    await gamesService.createGame(title, playtime, genre_id);
+    await gamesService.createGame(game);
     return res.sendStatus(201);
   } catch (err) {
     if (err.name === "DuplicatedGameName") return res.status(400).send(err.message);
     if (err.name === "GenreNotFound") return res.status(404).send(err.message);
+    if (err.name === "PlatformNotFound") return res.status(404).send(err.message);
     return res.status(500).send(err.message);
   }
 }
@@ -23,7 +24,7 @@ export async function getGames(req: Request, res: Response) {
 
     if (genre) {
       games = await gamesService.getGamesByGenre(genre);
-    }else {
+    } else {
       games = await gamesService.getGames();
     }
 

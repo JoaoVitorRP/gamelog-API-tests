@@ -10,6 +10,16 @@ async function validateUniqueGenre(genre: string) {
   }
 }
 
+async function validateGenreId(id: number) {
+  const genreInfo = await genresRepository.findGenreById(id);
+  if (!genreInfo) {
+    throw {
+      name: "GenreNotFound",
+      message: "Could not find a genre with this id!",
+    };
+  }
+}
+
 async function createGenre(genre: string) {
   await validateUniqueGenre(genre);
 
@@ -21,6 +31,7 @@ function getGenres() {
 }
 
 export const genresService = {
+  validateGenreId,
   createGenre,
   getGenres,
 };

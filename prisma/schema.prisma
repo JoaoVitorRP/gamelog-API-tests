@@ -8,17 +8,26 @@ datasource db {
 }
 
 model games {
-  id         Int      @id @default(autoincrement())
-  title      String   @unique
-  playtime   Int
-  genre_id   Int
-  created_at DateTime @default(now()) @db.Timestamp(6)
-  genres     genres   @relation(fields: [genre_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id          Int       @id @default(autoincrement())
+  title       String    @unique
+  playtime    Int
+  genre_id    Int
+  platform_id Int
+  created_at  DateTime  @default(now()) @db.Timestamp(6)
+  genres      genres    @relation(fields: [genre_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  platforms   platforms @relation(fields: [platform_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model genres {
   id         Int      @id @default(autoincrement())
   genre      String   @unique
+  created_at DateTime @default(now()) @db.Timestamp(6)
+  games      games[]
+}
+
+model platforms {
+  id         Int      @id @default(autoincrement())
+  platform   String   @unique
   created_at DateTime @default(now()) @db.Timestamp(6)
   games      games[]
 }

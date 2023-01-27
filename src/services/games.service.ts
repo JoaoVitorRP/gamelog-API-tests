@@ -1,5 +1,7 @@
+import { GamePostRequest } from "../protocols/index.js";
 import { gamesRepository } from "../repositories/games.repository.js";
-import { genresRepository } from "../repositories/genres.repository.js";
+import { genresService } from "./genres.service.js";
+import { platformsService } from "./platforms.service.js";
 
 async function validateUniqueGame(title: string) {
   const gameInfo = await gamesRepository.findGameByTitle(title);
@@ -7,16 +9,6 @@ async function validateUniqueGame(title: string) {
     throw {
       name: "DuplicatedGameName",
       message: "There is already a game with this name!",
-    };
-  }
-}
-
-async function validateGenreId(id: number) {
-  const genreInfo = await genresRepository.findGenreById(id);
-  if (!genreInfo) {
-    throw {
-      name: "GenreNotFound",
-      message: "Could not find a genre with this id!",
     };
   }
 }
@@ -43,12 +35,14 @@ async function getGamesByGenre(genre: string) {
   return games;
 }
 
-async function createGame(title: string, playtime: number, genre_id: number) {
-  await validateUniqueGame(title);
+async function createGame(game: GamePostRequest) {
+  await validateUniqueGame(game.title);
 
-  await validateGenreId(genre_id);
+  await genresService.validateGenreId(game.genre_id);
 
-  return gamesRepository.createGame(title, playtime, genre_id);
+  await platformsService.validatePlatformId(game.platform_id);
+
+  return gamesRepository.createGame(game);
 }
 
 async function updatePlaytime(playtime: number, id: number) {
