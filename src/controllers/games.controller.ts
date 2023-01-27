@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { Game, GameGenre, GameIdParam, GamePlaytime } from "../protocols";
-import { gamesRepository } from "../repositories/games.repository.js";
+import { GameIdParam, GamePlaytime, GamePostRequest, GameReturn, Genre } from "../protocols";
 import { gamesService } from "../services/games.service.js";
 
 export async function insertGame(req: Request, res: Response) {
-  const { title, playtime, genre_id } = req.body as Game;
+  const { title, playtime, genre_id } = req.body as GamePostRequest;
 
   try {
     await gamesService.createGame(title, playtime, genre_id);
@@ -17,11 +16,18 @@ export async function insertGame(req: Request, res: Response) {
 }
 
 export async function getGames(req: Request, res: Response) {
-  const { genre } = req.query as GameGenre;
+  const { genre } = req.query as Genre;
 
   try {
-    const games = await gamesRepository.getGames(genre);
-    return res.status(200).send(games.rows);
+    let games: GameReturn[];
+
+    if (genre) {
+      games = await gamesService.getGamesByGenre(genre);
+    }else {
+      games = await gamesService.getGames();
+    }
+
+    return res.status(200).send(games);
   } catch (err) {
     return res.status(500).send(err.message);
   }
@@ -59,8 +65,8 @@ export async function deleteGame(req: Request, res: Response) {
 export async function getPlaytimeAverage(req: Request, res: Response) {
   try {
     const average = await gamesService.getAveragePlaytime();
-    const time = Number(average.rows[0].avg);
-    return res.status(200).send(`Your average playtime is: ${time.toFixed(2)} minutes`);
+
+    return res.status(200).send(`Your average playtime is: ${average.toFixed(2)} minutes`);
   } catch (err) {
     if (err.name === "MissingGames") return res.status(400).send(err.message);
     return res.status(500).send(err.message);

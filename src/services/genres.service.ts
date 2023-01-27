@@ -1,8 +1,8 @@
 import { genresRepository } from "../repositories/genres.repository.js";
 
 async function validateUniqueGenre(genre: string) {
-  const genreInfo = await genresRepository.getGenreByName(genre);
-  if (genreInfo.rows.length > 0) {
+  const genreInfo = await genresRepository.findGenreByName(genre);
+  if (genreInfo) {
     throw {
       name: "DuplicatedGenreName",
       message: "This genre already exists!",
@@ -13,9 +13,14 @@ async function validateUniqueGenre(genre: string) {
 async function createGenre(genre: string) {
   await validateUniqueGenre(genre);
 
-  return genresRepository.insertGenre(genre);
+  return genresRepository.createGenre(genre);
+}
+
+function getGenres() {
+  return genresRepository.findGenres();
 }
 
 export const genresService = {
   createGenre,
+  getGenres,
 };

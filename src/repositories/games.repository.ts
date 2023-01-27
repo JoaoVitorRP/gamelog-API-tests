@@ -1,106 +1,102 @@
-import { QueryResult } from "pg";
-import { connection } from "../database/db.js";
-import { GameEntity, GamePlaytimeAverage } from "../protocols";
+import prisma from "../database/db.js";
 
-function insertGame(title: string, playtime: number, genre_id: number): Promise<QueryResult> {
-  return connection.query(
-    `
-    INSERT INTO
-      games(title, playtime, genre_id)
-    VALUES
-      ($1, $2, $3);
-    `,
-    [title, playtime, genre_id]
-  );
+function createGame(title: string, playtime: number, genre_id: number) {
+  return prisma.games.create({
+    data: {
+      title: title,
+      playtime: playtime,
+      genre_id: genre_id,
+    },
+  });
 }
 
-function getGames(genre: string): Promise<QueryResult<GameEntity>> {
-  return connection.query(
-    `
-    SELECT
-      ga.id, ga.title, ga.playtime, ge.genre
-    FROM
-      games ga
-    JOIN
-      genres ge
-    ON
-      ga.genre_id = ge.id
-    ${genre ? `WHERE ge.genre ILIKE $1` : ``};
-    `,
-    genre ? [genre] : []
-  );
+function findGames() {
+  return prisma.games.findMany({
+    select: {
+      id: true,
+      title: true,
+      playtime: true,
+      genres: {
+        select: {
+          genre: true,
+        },
+      },
+    },
+  });
 }
 
-function getGameByTitle(title: string): Promise<QueryResult<GameEntity>> {
-  return connection.query(
-    `
-    SELECT
-      id, title, playtime, genre_id
-    FROM
-      games
-    WHERE
-      title = $1;
-    `,
-    [title]
-  );
+function findGamesByGenre(genre: string) {
+  return prisma.games.findMany({
+    select: {
+      id: true,
+      title: true,
+      playtime: true,
+      genres: {
+        select: {
+          genre: true,
+        },
+      },
+    },
+    where: {
+      genres: {
+        genre: {
+          startsWith: genre,
+          mode: "insensitive",
+        },
+      },
+    },
+  });
 }
 
-function getGameById(id: number): Promise<QueryResult<GameEntity>> {
-  return connection.query(
-    `
-    SELECT
-      id, title, playtime, genre_id
-    FROM
-      games
-    WHERE
-      id = $1;
-    `,
-    [id]
-  );
+function findGameByTitle(title: string) {
+  return prisma.games.findUnique({
+    where: {
+      title: title,
+    },
+  });
 }
 
-function updatePlaytime(playtime: number, id: number): Promise<QueryResult> {
-  return connection.query(
-    `
-    UPDATE
-      games
-    SET
-      playtime = $1
-    WHERE
-      id = $2;
-    `,
-    [playtime, id]
-  );
+function findGameById(id: number) {
+  return prisma.games.findUnique({
+    where: {
+      id: id,
+    },
+  });
 }
 
-function deleteGame(id: number): Promise<QueryResult> {
-  return connection.query(
-    `
-    DELETE FROM
-      games
-    WHERE
-      id = $1;
-    `,
-    [id]
-  );
+function updatePlaytime(playtime: number, id: number) {
+  return prisma.games.update({
+    where: {
+      id: id,
+    },
+    data: {
+      playtime: playtime,
+    },
+  });
 }
 
-function getPlaytimeAverage(): Promise<QueryResult<GamePlaytimeAverage>> {
-  return connection.query(
-    `
-    SELECT
-      AVG(playtime)
-    FROM
-      games;
-    `
-  );
+function deleteGame(id: number) {
+  return prisma.games.delete({
+    where: {
+      id: id,
+    },
+  });
+}
+
+function getPlaytimeAverage() {
+  return prisma.games.aggregate({
+    _avg: {
+      playtime: true,
+    },
+  });
 }
 
 export const gamesRepository = {
-  insertGame,
-  getGames,
-  getGameByTitle,
-  getGameById,
+  createGame,
+  findGames,
+  findGamesByGenre,
+  findGameByTitle,
+  findGameById,
   updatePlaytime,
   deleteGame,
   getPlaytimeAverage,
