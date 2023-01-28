@@ -1,4 +1,4 @@
-export type Genre = {
+export type GenrePostRequest = {
   genre: string;
 };
 
@@ -25,7 +25,7 @@ export type GameIdParam = {
   id: string;
 };
 
-export type GamePlaytime = Omit<GamePostRequest, "title" | "genre_id" | "platforn_id">;
+export type GamePlaytime = Omit<GamePostRequest, "title" | "genre_id" | "platform_id">;
 
 export type GamePlaytimeAverage = {
   avg: string;

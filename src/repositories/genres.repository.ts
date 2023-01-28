@@ -1,10 +1,9 @@
 import prisma from "../database/db.js";
+import { GenrePostRequest } from "../protocols/index.js";
 
-function createGenre(genre: string) {
+function createGenre(genreData: GenrePostRequest) {
   return prisma.genres.create({
-    data: {
-      genre: genre,
-    },
+    data: genreData,
   });
 }
 
@@ -18,26 +17,14 @@ function findGenres() {
 }
 
 function findGenreByName(genre: string) {
-  return prisma.genres.findMany({
-    where: {
-      genre: genre,
-    },
-    select: {
-      id: true,
-      genre: true,
-    },
+  return prisma.genres.findUnique({
+    where: { genre },
   });
 }
 
 function findGenreById(id: number) {
   return prisma.genres.findUnique({
-    where: {
-      id: id,
-    },
-    select: {
-      id: true,
-      genre: true,
-    },
+    where: { id },
   });
 }
 

@@ -1,9 +1,9 @@
 import prisma from "../database/db.js";
-import { GamePostRequest } from "../protocols/index.js";
+import { GamePlaytime, GamePostRequest } from "../protocols/index.js";
 
-function createGame(game: GamePostRequest) {
+function createGame(gameData: GamePostRequest) {
   return prisma.games.create({
-    data: game,
+    data: gameData,
   });
 }
 
@@ -21,8 +21,8 @@ function findGames() {
       platforms: {
         select: {
           platform: true,
-        }
-      }
+        },
+      },
     },
   });
 }
@@ -41,8 +41,8 @@ function findGamesByGenre(genre: string) {
       platforms: {
         select: {
           platform: true,
-        }
-      }
+        },
+      },
     },
     where: {
       genres: {
@@ -57,36 +57,26 @@ function findGamesByGenre(genre: string) {
 
 function findGameByTitle(title: string) {
   return prisma.games.findUnique({
-    where: {
-      title: title,
-    },
+    where: { title },
   });
 }
 
 function findGameById(id: number) {
   return prisma.games.findUnique({
-    where: {
-      id: id,
-    },
+    where: { id },
   });
 }
 
-function updatePlaytime(playtime: number, id: number) {
+function updatePlaytime(playtime: GamePlaytime, id: number) {
   return prisma.games.update({
-    where: {
-      id: id,
-    },
-    data: {
-      playtime: playtime,
-    },
+    where: { id },
+    data: playtime,
   });
 }
 
 function deleteGame(id: number) {
   return prisma.games.delete({
-    where: {
-      id: id,
-    },
+    where: { id },
   });
 }
 

@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
-import { GameIdParam, GamePlaytime, GamePostRequest, GameReturn, Genre } from "../protocols";
+import { GameIdParam, GamePlaytime, GamePostRequest, GameReturn, GenrePostRequest } from "../protocols";
 import { gamesService } from "../services/games.service.js";
 
 export async function insertGame(req: Request, res: Response) {
-  const game = req.body as GamePostRequest;
+  const gameData = req.body as GamePostRequest;
 
   try {
-    await gamesService.createGame(game);
+    await gamesService.createGame(gameData);
     return res.sendStatus(201);
   } catch (err) {
     if (err.name === "DuplicatedGameName") return res.status(400).send(err.message);
@@ -17,7 +17,7 @@ export async function insertGame(req: Request, res: Response) {
 }
 
 export async function getGames(req: Request, res: Response) {
-  const { genre } = req.query as Genre;
+  const { genre } = req.query as GenrePostRequest;
 
   try {
     let games: GameReturn[];
@@ -36,7 +36,7 @@ export async function getGames(req: Request, res: Response) {
 
 export async function patchGame(req: Request, res: Response) {
   const { id } = req.params as GameIdParam;
-  const { playtime } = req.body as GamePlaytime;
+  const playtime = req.body as GamePlaytime;
 
   try {
     await gamesService.updatePlaytime(playtime, Number(id));

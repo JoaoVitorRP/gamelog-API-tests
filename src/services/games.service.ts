@@ -1,11 +1,11 @@
-import { GamePostRequest } from "../protocols/index.js";
+import { GamePlaytime, GamePostRequest } from "../protocols/index.js";
 import { gamesRepository } from "../repositories/games.repository.js";
 import { genresService } from "./genres.service.js";
 import { platformsService } from "./platforms.service.js";
 
 async function validateUniqueGame(title: string) {
-  const gameInfo = await gamesRepository.findGameByTitle(title);
-  if (!gameInfo) {
+  const gameData = await gamesRepository.findGameByTitle(title);
+  if (gameData) {
     throw {
       name: "DuplicatedGameName",
       message: "There is already a game with this name!",
@@ -14,8 +14,8 @@ async function validateUniqueGame(title: string) {
 }
 
 async function validateGameId(id: number) {
-  const gameInfo = await gamesRepository.findGameById(id);
-  if (!gameInfo) {
+  const gameData = await gamesRepository.findGameById(id);
+  if (!gameData) {
     throw {
       name: "GameNotFound",
       message: "Could not find a game with this id!",
@@ -35,17 +35,17 @@ async function getGamesByGenre(genre: string) {
   return games;
 }
 
-async function createGame(game: GamePostRequest) {
-  await validateUniqueGame(game.title);
+async function createGame(gameData: GamePostRequest) {
+  await validateUniqueGame(gameData.title);
 
-  await genresService.validateGenreId(game.genre_id);
+  await genresService.validateGenreId(gameData.genre_id);
 
-  await platformsService.validatePlatformId(game.platform_id);
+  await platformsService.validatePlatformId(gameData.platform_id);
 
-  return gamesRepository.createGame(game);
+  return gamesRepository.createGame(gameData);
 }
 
-async function updatePlaytime(playtime: number, id: number) {
+async function updatePlaytime(playtime: GamePlaytime, id: number) {
   await validateGameId(id);
 
   return gamesRepository.updatePlaytime(playtime, id);
@@ -58,8 +58,8 @@ async function deleteGame(id: number) {
 }
 
 async function getAveragePlaytime() {
-  const gameInfo = await gamesRepository.findGames();
-  if (gameInfo.length <= 1) {
+  const gameData = await gamesRepository.findGames();
+  if (gameData.length <= 1) {
     throw {
       name: "MissingGames",
       message: "Please, add two or more games before trying to calculate average playtime",
