@@ -30,3 +30,10 @@ export type GamePlaytime = Omit<GamePostRequest, "title" | "genre_id" | "platfor
 export type GamePlaytimeAverage = {
   avg: string;
 };
+
+export type PlatformReturn = {
+  id: number;
+  platform: string;
+};
+
+export type PlatformPostRequest = Omit<PlatformReturn, "id">;

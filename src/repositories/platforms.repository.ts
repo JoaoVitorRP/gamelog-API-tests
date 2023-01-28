@@ -1,4 +1,5 @@
 import prisma from "../database/db.js";
+import { PlatformPostRequest } from "../protocols/index.js";
 
 function findPlatformById(id: number) {
   return prisma.platforms.findUnique({
@@ -8,6 +9,30 @@ function findPlatformById(id: number) {
   });
 }
 
+function findPlatformByName(platform: string) {
+  return prisma.platforms.findUnique({
+    where: { platform },
+  });
+}
+
+function createPlatform(platformData: PlatformPostRequest) {
+  return prisma.platforms.create({
+    data: platformData,
+  });
+}
+
+function findPlatforms() {
+  return prisma.platforms.findMany({
+    select: {
+      id: true,
+      platform: true,
+    },
+  });
+}
+
 export const platformsRepository = {
   findPlatformById,
+  findPlatformByName,
+  createPlatform,
+  findPlatforms,
 };

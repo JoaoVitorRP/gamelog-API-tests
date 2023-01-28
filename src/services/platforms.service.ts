@@ -1,3 +1,4 @@
+import { PlatformPostRequest } from "../protocols/index.js";
 import { platformsRepository } from "../repositories/platforms.repository.js";
 
 async function validatePlatformId(id: number) {
@@ -13,6 +14,29 @@ async function validatePlatformId(id: number) {
   return platforms;
 }
 
+async function validatePlatformName(platform: string) {
+  const platforms = await platformsRepository.findPlatformByName(platform);
+
+  if (platforms) {
+    throw {
+      name: "DuplicatedPlatformName",
+      message: "This platform already exists!",
+    };
+  }
+}
+
+async function postPlatform(platformData: PlatformPostRequest) {
+  await validatePlatformName(platformData.platform);
+
+  await platformsRepository.createPlatform(platformData);
+}
+
+async function getPlatforms() {
+  return platformsRepository.findPlatforms();
+}
+
 export const platformsService = {
   validatePlatformId,
+  postPlatform,
+  getPlatforms,
 };
