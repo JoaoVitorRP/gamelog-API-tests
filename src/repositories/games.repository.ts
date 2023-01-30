@@ -55,6 +55,34 @@ function findGamesByGenre(genre: string) {
   });
 }
 
+function findGamesByPlatform(platform: string) {
+  return prisma.games.findMany({
+    select: {
+      id: true,
+      title: true,
+      playtime: true,
+      genres: {
+        select: {
+          genre: true,
+        },
+      },
+      platforms: {
+        select: {
+          platform: true,
+        },
+      },
+    },
+    where: {
+      platforms: {
+        platform: {
+          startsWith: platform,
+          mode: "insensitive",
+        },
+      },
+    },
+  });
+}
+
 function findGameByTitle(title: string) {
   return prisma.games.findUnique({
     where: { title },
@@ -92,6 +120,7 @@ export const gamesRepository = {
   createGame,
   findGames,
   findGamesByGenre,
+  findGamesByPlatform,
   findGameByTitle,
   findGameById,
   updatePlaytime,

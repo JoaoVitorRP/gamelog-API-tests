@@ -30,7 +30,27 @@ async function getGames() {
 }
 
 async function getGamesByGenre(genre: string) {
+  if (Number(genre)) {
+    throw {
+      name: "InvalidGenre",
+      message: "Genre must be a string",
+    };
+  }
+
   const games = await gamesRepository.findGamesByGenre(genre);
+
+  return games;
+}
+
+async function getGamesByPlatform(platform: string) {
+  if (Number(platform)) {
+    throw {
+      name: "InvalidGenre",
+      message: "Platform must be a string",
+    };
+  }
+
+  const games = await gamesRepository.findGamesByPlatform(platform);
 
   return games;
 }
@@ -74,6 +94,7 @@ async function getAveragePlaytime() {
 export const gamesService = {
   getGames,
   getGamesByGenre,
+  getGamesByPlatform,
   createGame,
   updatePlaytime,
   deleteGame,

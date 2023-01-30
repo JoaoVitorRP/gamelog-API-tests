@@ -1,5 +1,12 @@
 import { Request, Response } from "express";
-import { GameIdParam, GamePlaytime, GamePostRequest, GameReturn, GenrePostRequest } from "../protocols";
+import {
+  GameIdParam,
+  GamePlaytime,
+  GamePostRequest,
+  GameReturn,
+  GenrePostRequest,
+  PlatformPostRequest,
+} from "../protocols";
 import { gamesService } from "../services/games.service.js";
 
 export async function insertGame(req: Request, res: Response) {
@@ -18,18 +25,23 @@ export async function insertGame(req: Request, res: Response) {
 
 export async function getGames(req: Request, res: Response) {
   const { genre } = req.query as GenrePostRequest;
+  const { platform } = req.query as PlatformPostRequest;
 
   try {
     let games: GameReturn[];
 
     if (genre) {
       games = await gamesService.getGamesByGenre(genre);
+    } else if (platform) {
+      games = await gamesService.getGamesByPlatform(platform);
     } else {
       games = await gamesService.getGames();
     }
 
     return res.status(200).send(games);
   } catch (err) {
+    if (err.name === "InvalidGenre") return res.status(400).send(err.message);
+    if (err.name === "InvalidPlatform") return res.status(400).send(err.message);
     return res.status(500).send(err.message);
   }
 }
