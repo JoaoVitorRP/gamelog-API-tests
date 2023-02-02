@@ -11,7 +11,7 @@ Após feito isso, deve-se dar o comando `npm i` para instalar todas as dependên
 
 É necessário, então, que seja criada a database que o projeto irá usar. Para isso, deve-se criar uma databse com o nome que desejar (recomenda-se gamelog).
 
-Deve-se criar um arquivo .env na raiz do projeto e copiar o que está em .env.example, trocando os campos `YourUserName`, `YourPassword`, `YourHostName` e `YourDatabaseName` pelos seus respectivos valores corretos.
+Deve-se criar um arquivo `.env.development` na raiz do projeto e copiar o que está em `.env.example`, trocando os campos `YourUserName`, `YourPassword`, `YourHostName` e `YourDatabaseName` pelos seus respectivos valores corretos.
 
 Por esse projeto usar prisma, é necessário que o usuário inicie a ORM através do comando `npx prisma init` e siga as instruções ali contidas.
 
@@ -25,7 +25,7 @@ Concluído esses passos, o projeto está pronto para rodar com `npm run dev`.
 
 Assumindo que os passos anteriores foram seguidos, deve-se criar uma outra database que servirá apenas para testes. Recomenda-se o uso do nome gamelog_tests.
 
-Após criar essa nova database, precisamos criar um novo .env chamado .env.test, o qual usará a mesma estrutura do outro .env, trocando o campo `YourDatabaseName` pelo nome da database criada no passo anterior.
+Após criar essa nova database, precisamos criar um novo .env chamado `.env.test`, o qual usará a mesma estrutura do outro .env, trocando o campo `YourDatabaseName` pelo nome da database criada no passo anterior.
 
 Com isso, podemos executar o comando `npm run prisma:migrate:test` para que sejam criadas tabelas iguais as da database de development.
 
@@ -35,7 +35,6 @@ Concluído esses passos, o projeto está pronto para ser testado através do com
 
 POST: /genres </br>
 Body: </br>![image](https://user-images.githubusercontent.com/110701545/215526724-de50e87f-c2f3-4b06-aada-84e6c5445a1d.png)
-
 
 GET: /genres </br>
 Response: </br>![image](https://user-images.githubusercontent.com/110701545/215527628-09f86d15-9b0a-4d0e-ba32-755a53646fd9.png)
