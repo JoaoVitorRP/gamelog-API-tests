@@ -1,7 +1,7 @@
 import prisma from "../src/database/db";
 
 export async function disconnectDb() {
-  await prisma.$disconnect;
+  await prisma.$disconnect();
 }
 
 export async function cleanDb() {
