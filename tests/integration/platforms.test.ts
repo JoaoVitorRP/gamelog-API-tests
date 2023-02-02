@@ -15,7 +15,7 @@ beforeEach(async () => {
 
 describe("GET /platforms", () => {
   it("Should respond with status 200 and with platforms data", async () => {
-    const platformData = await createPlatform();
+    const platformData = await createPlatform("Steam");
 
     const response = await server.get("/platforms");
 
@@ -39,7 +39,7 @@ describe("POST /platforms", () => {
   });
 
   it("Should respond with status 409 when platform already exists", async () => {
-    await createPlatform();
+    await createPlatform("Steam");
 
     const response = await server.post("/platforms").send({
       platform: "Steam",

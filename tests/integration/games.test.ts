@@ -1,6 +1,6 @@
 import supertest from "supertest";
 import app from "../../src/app";
-import { countGames, createGame, createGenre, createPlatform } from "../factories";
+import { countGames, createGame, createGenre, createPlatform, createValidGame } from "../factories";
 import { cleanDb, disconnectDb } from "../helpers";
 
 const server = supertest(app);
@@ -15,15 +15,7 @@ beforeEach(async () => {
 
 describe("GET /games", () => {
   it("Should respond with status 200 and with games data", async () => {
-    const genreData = await createGenre();
-    const platformData = await createPlatform();
-    const game = {
-      title: "Stardew Valley",
-      playtime: 10000,
-      genre_id: genreData.id,
-      platform_id: platformData.id,
-    };
-    const gameData = await createGame(game);
+    const { genreData, platformData, gameData } = await createValidGame("Stardew Valley", 10000, "Aventura", "Steam");
 
     const response = await server.get("/games");
 
@@ -58,15 +50,7 @@ describe("GET /games?genre=", () => {
   });
 
   it("Should respond with status 200 and with games data", async () => {
-    const genreData = await createGenre();
-    const platformData = await createPlatform();
-    const game = {
-      title: "Stardew Valley",
-      playtime: 10000,
-      genre_id: genreData.id,
-      platform_id: platformData.id,
-    };
-    const gameData = await createGame(game);
+    const { genreData, platformData, gameData } = await createValidGame("Stardew Valley", 10000, "Aventura", "Steam");
 
     const response = await server.get("/games?genre=aventura");
 
@@ -101,15 +85,7 @@ describe("GET /games?platform=", () => {
   });
 
   it("Should respond with status 200 and with games data", async () => {
-    const genreData = await createGenre();
-    const platformData = await createPlatform();
-    const game = {
-      title: "Stardew Valley",
-      playtime: 10000,
-      genre_id: genreData.id,
-      platform_id: platformData.id,
-    };
-    const gameData = await createGame(game);
+    const { genreData, platformData, gameData } = await createValidGame("Stardew Valley", 10000, "Aventura", "Steam");
 
     const response = await server.get("/games?platform=steam");
 
@@ -138,22 +114,8 @@ describe("GET /games/playtime-avg", () => {
   });
 
   it("Should respond with status 200 and with playtime average", async () => {
-    const genreData = await createGenre();
-    const platformData = await createPlatform();
-    const firstGame = {
-      title: "Stardew Valley",
-      playtime: 10000,
-      genre_id: genreData.id,
-      platform_id: platformData.id,
-    };
-    const secondGame = {
-      title: "Potion Permit",
-      playtime: 5000,
-      genre_id: genreData.id,
-      platform_id: platformData.id,
-    };
-    await createGame(firstGame);
-    await createGame(secondGame);
+    await createValidGame("Stardew Valley", 10000, "Aventura", "Steam");
+    await createValidGame("Trackmania 2020", 5000, "Corrida", "Epic Games Store");
 
     const response = await server.get("/games/playtime-avg");
 
@@ -172,15 +134,7 @@ describe("POST /games", () => {
   });
 
   it("Should respond with status 409 when game already exists", async () => {
-    const genreData = await createGenre();
-    const platformData = await createPlatform();
-    const firstGame = {
-      title: "Stardew Valley",
-      playtime: 10000,
-      genre_id: genreData.id,
-      platform_id: platformData.id,
-    };
-    await createGame(firstGame);
+    const { genreData, platformData } = await createValidGame("Stardew Valley", 10000, "Aventura", "Steam");
 
     const response = await server.post("/games").send({
       title: "Stardew Valley",
@@ -193,7 +147,7 @@ describe("POST /games", () => {
   });
 
   it("Should respond with status 404 when given genre doesn't exist", async () => {
-    const platformData = await createPlatform();
+    const platformData = await createPlatform("Steam");
 
     const response = await server.post("/games").send({
       title: "Stardew Valley",
@@ -206,7 +160,7 @@ describe("POST /games", () => {
   });
 
   it("Should respond with status 404 when given platform doesn't exist", async () => {
-    const genreData = await createGenre();
+    const genreData = await createGenre("Aventura");
 
     const response = await server.post("/games").send({
       title: "Stardew Valley",
@@ -219,8 +173,8 @@ describe("POST /games", () => {
   });
 
   it("Should respond with status 201 and insert a new game in the database", async () => {
-    const genreData = await createGenre();
-    const platformData = await createPlatform();
+    const genreData = await createGenre("Aventura");
+    const platformData = await createPlatform("Steam");
 
     const response = await server.post("/games").send({
       title: "Stardew Valley",
@@ -262,15 +216,7 @@ describe("PATCH /games", () => {
   });
 
   it("Should respond with status 201 and send game data", async () => {
-    const genreData = await createGenre();
-    const platformData = await createPlatform();
-    const firstGame = {
-      title: "Stardew Valley",
-      playtime: 10000,
-      genre_id: genreData.id,
-      platform_id: platformData.id,
-    };
-    const gameData = await createGame(firstGame);
+    const { gameData } = await createValidGame("Stardew Valley", 10000, "Aventura", "Steam");
 
     const response = await server.patch(`/games/${gameData.id}`).send({
       playtime: 9000,
@@ -302,15 +248,7 @@ describe("DELETE /games", () => {
   });
 
   it("Should respond with status 200 and delete game from the database", async () => {
-    const genreData = await createGenre();
-    const platformData = await createPlatform();
-    const firstGame = {
-      title: "Stardew Valley",
-      playtime: 10000,
-      genre_id: genreData.id,
-      platform_id: platformData.id,
-    };
-    const gameData = await createGame(firstGame);
+    const { gameData } = await createValidGame("Stardew Valley", 10000, "Aventura", "Steam");
 
     const response = await server.delete(`/games/${gameData.id}`);
 

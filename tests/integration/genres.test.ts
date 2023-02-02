@@ -15,7 +15,7 @@ beforeEach(async () => {
 
 describe("GET /genres", () => {
   it("Should respond with status 200 and with genres data", async () => {
-    const genreData = await createGenre();
+    const genreData = await createGenre("Aventura");
 
     const response = await server.get("/genres");
 
@@ -39,7 +39,7 @@ describe("POST /genres", () => {
   });
 
   it("Should respond with status 409 when genre already exists", async () => {
-    await createGenre();
+    await createGenre("Aventura");
 
     const response = await server.post("/genres").send({
       genre: "Aventura",

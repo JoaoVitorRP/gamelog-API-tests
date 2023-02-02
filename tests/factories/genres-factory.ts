@@ -1,10 +1,8 @@
 import prisma from "../../src/database/db";
 
-export async function createGenre() {
+export async function createGenre(genre: string) {
   return prisma.genres.create({
-    data: {
-      genre: "Aventura",
-    },
+    data: { genre },
   });
 }
 
