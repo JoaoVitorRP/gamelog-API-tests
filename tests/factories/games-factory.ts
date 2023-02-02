@@ -6,3 +6,7 @@ export async function createGame(game: GamePostRequest) {
     data: game,
   });
 }
+
+export async function countGames() {
+  return prisma.games.count();
+}
