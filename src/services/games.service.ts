@@ -39,6 +39,13 @@ async function getGamesByGenre(genre: string) {
 
   const games = await gamesRepository.findGamesByGenre(genre);
 
+  if (games.length === 0) {
+    throw {
+      name: "GamesNotFound",
+      message: "Could not find games with this genre",
+    };
+  }
+
   return games;
 }
 
@@ -51,6 +58,13 @@ async function getGamesByPlatform(platform: string) {
   }
 
   const games = await gamesRepository.findGamesByPlatform(platform);
+
+  if (games.length === 0) {
+    throw {
+      name: "GamesNotFound",
+      message: "Could not find games from this platform",
+    };
+  }
 
   return games;
 }

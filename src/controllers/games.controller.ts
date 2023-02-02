@@ -9,7 +9,7 @@ import {
 } from "../protocols";
 import { gamesService } from "../services/games.service";
 
-export async function insertGame(req: Request, res: Response) {
+export async function postGame(req: Request, res: Response) {
   const gameData = req.body as GamePostRequest;
 
   try {
@@ -42,6 +42,7 @@ export async function getGames(req: Request, res: Response) {
   } catch (err) {
     if (err.name === "InvalidGenre") return res.status(400).send(err.message);
     if (err.name === "InvalidPlatform") return res.status(400).send(err.message);
+    if (err.name === "GamesNotFound") return res.status(404).send(err.message);
     return res.status(500).send(err.message);
   }
 }
