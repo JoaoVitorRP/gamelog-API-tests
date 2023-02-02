@@ -16,7 +16,7 @@ export async function postGame(req: Request, res: Response) {
     await gamesService.createGame(gameData);
     return res.sendStatus(201);
   } catch (err) {
-    if (err.name === "DuplicatedGameName") return res.status(400).send(err.message);
+    if (err.name === "DuplicatedGameName") return res.status(409).send(err.message);
     if (err.name === "GenreNotFound") return res.status(404).send(err.message);
     if (err.name === "PlatformNotFound") return res.status(404).send(err.message);
     return res.status(500).send(err.message);
@@ -40,8 +40,7 @@ export async function getGames(req: Request, res: Response) {
 
     return res.status(200).send(games);
   } catch (err) {
-    if (err.name === "InvalidGenre") return res.status(400).send(err.message);
-    if (err.name === "InvalidPlatform") return res.status(400).send(err.message);
+    if (err.name === "InvalidQuery") return res.status(400).send(err.message);
     if (err.name === "GamesNotFound") return res.status(404).send(err.message);
     return res.status(500).send(err.message);
   }
@@ -52,12 +51,11 @@ export async function patchGame(req: Request, res: Response) {
   const playtime = req.body as GamePlaytime;
 
   try {
-    await gamesService.updatePlaytime(playtime, Number(id));
-    return res.sendStatus(201);
+    const updatedGame = await gamesService.updatePlaytime(playtime, Number(id));
+    return res.status(201).send(updatedGame);
   } catch (err) {
     if (err.name === "GameNotFound") return res.status(404).send(err.message);
-    if (err.message === `invalid input syntax for type integer: "${id}"`)
-      return res.status(400).send("Param id must be an integer number");
+    if (err.name === "InvalidParam") return res.status(400).send(err.message);
     return res.status(500).send(err.message);
   }
 }
@@ -70,8 +68,7 @@ export async function deleteGame(req: Request, res: Response) {
     return res.sendStatus(200);
   } catch (err) {
     if (err.name === "GameNotFound") return res.status(404).send(err.message);
-    if (err.message === `invalid input syntax for type integer: "${Number(id)}"`)
-      return res.status(400).send("Param id must be an integer number");
+    if (err.name === "InvalidParam") return res.status(400).send(err.message);
     return res.status(500).send(err.message);
   }
 }

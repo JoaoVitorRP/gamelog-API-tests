@@ -14,6 +14,13 @@ async function validateUniqueGame(title: string) {
 }
 
 async function validateGameId(id: number) {
+  if(!id) {
+    throw {
+      name: "InvalidParam",
+      message: "Id must be an integer"
+    }
+  }
+
   const gameData = await gamesRepository.findGameById(id);
   if (!gameData) {
     throw {
@@ -32,7 +39,7 @@ async function getGames() {
 async function getGamesByGenre(genre: string) {
   if (Number(genre)) {
     throw {
-      name: "InvalidGenre",
+      name: "InvalidQuery",
       message: "Genre must be a string",
     };
   }
@@ -52,7 +59,7 @@ async function getGamesByGenre(genre: string) {
 async function getGamesByPlatform(platform: string) {
   if (Number(platform)) {
     throw {
-      name: "InvalidGenre",
+      name: "InvalidQuery",
       message: "Platform must be a string",
     };
   }
