@@ -8,10 +8,6 @@ export async function createPlatform() {
   });
 }
 
-export async function findPlatforms() {
-  return prisma.platforms.findMany();
-}
-
 export async function countPlatforms() {
   return prisma.platforms.count();
 }
