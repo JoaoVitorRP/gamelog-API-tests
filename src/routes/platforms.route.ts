@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getPlatforms, postPlatform } from "../controllers/platforms.controller.js";
-import { validateBody } from "../middlewares/bodyValidation.middleware.js";
-import { platformSchema } from "../schemas/platform.schema.js";
+import { getPlatforms, postPlatform } from "../controllers/platforms.controller";
+import { validateBody } from "../middlewares/bodyValidation.middleware";
+import { platformSchema } from "../schemas/platform.schema";
 
 const platformsRouter = Router();
 

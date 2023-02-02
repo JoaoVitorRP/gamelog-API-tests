@@ -1,5 +1,5 @@
-import { PlatformPostRequest } from "../protocols/index.js";
-import { platformsRepository } from "../repositories/platforms.repository.js";
+import { PlatformPostRequest } from "../protocols/index";
+import { platformsRepository } from "../repositories/platforms.repository";
 
 async function validatePlatformId(id: number) {
   const platforms = await platformsRepository.findPlatformById(id);

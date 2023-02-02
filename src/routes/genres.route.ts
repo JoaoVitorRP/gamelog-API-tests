@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { getGenres, insertGenre } from "../controllers/genres.controller.js";
-import { validateBody } from "../middlewares/bodyValidation.middleware.js";
-import { genreSchema } from "../schemas/genre.schema.js";
+import { getGenres, insertGenre } from "../controllers/genres.controller";
+import { validateBody } from "../middlewares/bodyValidation.middleware";
+import { genreSchema } from "../schemas/genre.schema";
 
 const genresRouter = Router();
 

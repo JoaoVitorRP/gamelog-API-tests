@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { GenrePostRequest } from "../protocols";
-import { genresService } from "../services/genres.service.js";
+import { genresService } from "../services/genres.service";
 
 export async function insertGenre(req: Request, res: Response) {
   const genre = req.body as GenrePostRequest;

@@ -1,7 +1,7 @@
-import { GamePlaytime, GamePostRequest } from "../protocols/index.js";
-import { gamesRepository } from "../repositories/games.repository.js";
-import { genresService } from "./genres.service.js";
-import { platformsService } from "./platforms.service.js";
+import { GamePlaytime, GamePostRequest } from "../protocols/index";
+import { gamesRepository } from "../repositories/games.repository";
+import { genresService } from "./genres.service";
+import { platformsService } from "./platforms.service";
 
 async function validateUniqueGame(title: string) {
   const gameData = await gamesRepository.findGameByTitle(title);

@@ -1,5 +1,5 @@
-import prisma from "../database/db.js";
-import { GenrePostRequest } from "../protocols/index.js";
+import prisma from "../database/db";
+import { GenrePostRequest } from "../protocols/index";
 
 function createGenre(genreData: GenrePostRequest) {
   return prisma.genres.create({

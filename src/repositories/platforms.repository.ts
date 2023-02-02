@@ -1,5 +1,5 @@
-import prisma from "../database/db.js";
-import { PlatformPostRequest } from "../protocols/index.js";
+import prisma from "../database/db";
+import { PlatformPostRequest } from "../protocols/index";
 
 function findPlatformById(id: number) {
   return prisma.platforms.findUnique({

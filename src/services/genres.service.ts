@@ -1,5 +1,5 @@
-import { GenrePostRequest } from "../protocols/index.js";
-import { genresRepository } from "../repositories/genres.repository.js";
+import { GenrePostRequest } from "../protocols/index";
+import { genresRepository } from "../repositories/genres.repository";
 
 async function validateUniqueGenre(genre: string) {
   const genreData = await genresRepository.findGenreByName(genre);

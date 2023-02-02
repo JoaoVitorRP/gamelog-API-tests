@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { PlatformPostRequest } from "../protocols";
-import { platformsService } from "../services/platforms.service.js";
+import { platformsService } from "../services/platforms.service";
 
 export async function postPlatform(req: Request, res: Response) {
   const platformData = req.body as PlatformPostRequest;

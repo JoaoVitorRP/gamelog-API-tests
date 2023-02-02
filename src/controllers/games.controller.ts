@@ -7,7 +7,7 @@ import {
   GenrePostRequest,
   PlatformPostRequest,
 } from "../protocols";
-import { gamesService } from "../services/games.service.js";
+import { gamesService } from "../services/games.service";
 
 export async function insertGame(req: Request, res: Response) {
   const gameData = req.body as GamePostRequest;

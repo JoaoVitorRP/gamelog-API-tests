@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { deleteGame, getGames, getPlaytimeAverage, insertGame, patchGame } from "../controllers/games.controller.js";
-import { validateBody } from "../middlewares/bodyValidation.middleware.js";
-import { gameSchema, playtimeSchema } from "../schemas/game.schema.js";
+import { deleteGame, getGames, getPlaytimeAverage, insertGame, patchGame } from "../controllers/games.controller";
+import { validateBody } from "../middlewares/bodyValidation.middleware";
+import { gameSchema, playtimeSchema } from "../schemas/game.schema";
 
 const gamesRouter = Router();
 

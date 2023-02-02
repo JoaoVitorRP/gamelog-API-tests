@@ -1,5 +1,5 @@
-import prisma from "../database/db.js";
-import { GamePlaytime, GamePostRequest } from "../protocols/index.js";
+import prisma from "../database/db";
+import { GamePlaytime, GamePostRequest } from "../protocols/index";
 
 function createGame(gameData: GamePostRequest) {
   return prisma.games.create({
